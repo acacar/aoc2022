@@ -61,11 +61,11 @@ pub fn solve() {
     let filename: String = check_or_get_input(3);
     let data = prep(
         std::fs::read_to_string(filename)
-            .expect("Day 2: cannot read input")
+            .expect("Day 3: cannot read input")
             .as_str(),
     );
-    println!("Day 2, part 1: {}", part1(&data));
-    println!("Day 2, part 2: {}", part2(&data));
+    println!("Day 3, part 1: {}", part1(&data));
+    println!("Day 3, part 2: {}", part2(&data));
 }
 
 // TESTS
@@ -79,7 +79,7 @@ ttgJtRGJQctTZtZT
 CrZsJsPPZsGzwwsLwLmpwMDw"#;
 
 #[test]
-fn test_day02_prep() {
+fn test_day03_prep() {
     assert_eq!(prep(DAY3_EXAMPLE), 
     vec![
         "vJrwpWtwJgWrhcsFMMfFFhFp",
@@ -92,11 +92,11 @@ fn test_day02_prep() {
 }
 
 #[test]
-fn test_day02_part1() {
+fn test_day03_part1() {
     assert_eq!(part1(&prep(DAY3_EXAMPLE)), 157)
 }
 
 #[test]
-fn test_day02_part2() {
+fn test_day03_part2() {
     assert_eq!(part2(&prep(DAY3_EXAMPLE)), 70)
 }
