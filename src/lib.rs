@@ -22,13 +22,17 @@ fn get_input(day: usize, session_id: &String) -> Result<bytes::Bytes, reqwest::E
     Ok(content)
 }
 
-fn save_input(day: usize, filepath: &str, session_id: Option<String>) -> Result<(), std::io::Error> {
+fn save_input(
+    day: usize,
+    filepath: &str,
+    session_id: Option<String>,
+) -> Result<(), std::io::Error> {
     let session_id = match session_id {
         Some(s) => s,
         None => dotenv::var("AOC_SESSION_ID").expect("Session ID not defined."),
     };
-    let content = get_input(day, &session_id)
-        .expect(format!("Cannot get input for day {day}").as_str());
+    let content =
+        get_input(day, &session_id).expect(format!("Cannot get input for day {day}").as_str());
     let mut f = File::create(filepath)?;
     f.write(&content)?;
     return Ok(());
@@ -51,4 +55,3 @@ where
     let file = File::open(filename)?;
     Ok(io::BufReader::new(file).lines())
 }
-
