@@ -2,17 +2,17 @@ use crate::check_or_get_input;
 use sscanf::sscanf;
 
 fn prep(input: &str) -> Vec<(i32, i32, i32, i32)> {
-    input.lines()
-         .map( |line| sscanf!(line, "{i32}-{i32},{i32}-{i32}").expect("Bad input"))
-         .collect()
+    input
+        .lines()
+        .map(|line| sscanf!(line, "{i32}-{i32},{i32}-{i32}").expect("Bad input"))
+        .collect()
 }
 
 fn contains(regions: &(i32, i32, i32, i32)) -> bool {
     match regions {
-        (r1l, r1h, r2l, r2h) => (r1l <= r2l && r1h >= r2h) || (r2l <= r1l && r2h >= r1h)
+        (r1l, r1h, r2l, r2h) => (r1l <= r2l && r1h >= r2h) || (r2l <= r1l && r2h >= r1h),
     }
 }
-
 
 fn part1(data: &Vec<(i32, i32, i32, i32)>) -> i32 {
     let mut count = 0;
@@ -26,7 +26,7 @@ fn part1(data: &Vec<(i32, i32, i32, i32)>) -> i32 {
 
 fn overlaps(regions: &(i32, i32, i32, i32)) -> bool {
     match regions {
-        (r1l, r1h, r2l, r2h) => (r1l < r2l && r2l <= r1h) ||  ( r1l >= r2l && r1l <= r2h )
+        (r1l, r1h, r2l, r2h) => (r1l < r2l && r2l <= r1h) || (r1l >= r2l && r1l <= r2h),
     }
 }
 
@@ -63,12 +63,17 @@ const DAY4_EXAMPLE: &str = r#"2-4,6-8
 
 #[test]
 fn test_day04_prep() {
-    assert_eq!(prep(DAY4_EXAMPLE), [(2, 4, 6, 8),
-                                    (2, 3, 4, 5),  
-                                    (5, 7, 7, 9), 
-                                    (2, 8, 3, 7), 
-                                    (6, 6, 4, 6), 
-                                    (2, 6, 4, 8)]);
+    assert_eq!(
+        prep(DAY4_EXAMPLE),
+        [
+            (2, 4, 6, 8),
+            (2, 3, 4, 5),
+            (5, 7, 7, 9),
+            (2, 8, 3, 7),
+            (6, 6, 4, 6),
+            (2, 6, 4, 8)
+        ]
+    );
 }
 #[test]
 fn test_day04_part1() {
