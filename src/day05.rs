@@ -130,7 +130,7 @@ pub fn solve() {
     let filename: String = check_or_get_input(5);
     match prep(
         std::fs::read_to_string(filename)
-            .expect("Day 4: cannot read input")
+            .expect("Day 5: cannot read input")
             .as_str(),
     ) {
         (stacks, moves) => {

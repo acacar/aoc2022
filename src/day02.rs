@@ -43,7 +43,12 @@ fn score(p1: &Play, p2: &Play) -> i32 {
         0 => (me + 1) + 3, // Draw
         1 => (me + 1) + 6, // Win
         2 => me + 1,       // Loss
-        _ => panic!("No way for this to happen: {} {} {}", me, elf, (me - elf) % 3),
+        _ => panic!(
+            "No way for this to happen: {} {} {}",
+            me,
+            elf,
+            (me - elf) % 3
+        ),
     }
 }
 

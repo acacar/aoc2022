@@ -1,4 +1,4 @@
-use aoc2022::{day01, day02, day03, day04, day05};
+use aoc2022::{day01, day02, day03, day04, day05, day06};
 
 fn main() {
     day01::solve();
@@ -10,4 +10,6 @@ fn main() {
     day04::solve();
     println!("------------------");
     day05::solve();
+    println!("------------------");
+    day06::solve();
 }

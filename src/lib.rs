@@ -10,6 +10,7 @@ pub mod day02;
 pub mod day03;
 pub mod day04;
 pub mod day05;
+pub mod day06;
 
 fn get_input(day: usize, session_id: &String) -> Result<bytes::Bytes, reqwest::Error> {
     let endpoint = format!("https://adventofcode.com/2022/day/{day}/input");
