@@ -71,7 +71,9 @@ const DAY06_EXAMPLES_P2: (&str, &str, &str, &str, &str) = (
     "zcfzfwzzqfrljwzlrfnpqdbhtmscgvjw",
 );
 
+#[allow(dead_code)]
 const DAY06_EXPECTED_PART1: (i32, i32, i32, i32) = (5, 6, 10, 11);
+#[allow(dead_code)]
 const DAY06_EXPECTED_PART2: (i32, i32, i32, i32, i32) = (19, 23, 23, 29, 26);
 
 #[test]
