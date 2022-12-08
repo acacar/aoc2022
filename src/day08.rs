@@ -49,19 +49,19 @@ fn part1(input: &((i32, i32), HashMap<(i32, i32), i32>)) -> i32 {
                 break;
             }
         }
-        for ty in 0..t.1  {
+        for ty in 0..t.1 {
             let tyo = (t.0, ty);
-                if trees.get(&tyo).unwrap() >= trees.get(t).unwrap() {
-                    vtop = false;
-                    break
-                }
+            if trees.get(&tyo).unwrap() >= trees.get(t).unwrap() {
+                vtop = false;
+                break;
+            }
         }
-        for ty in t.1+1..len_y  {
+        for ty in t.1 + 1..len_y {
             let tyo = (t.0, ty);
-                if trees.get(&tyo).unwrap() >= trees.get(t).unwrap() {
-                    vbot = false;
-                    break
-                }
+            if trees.get(&tyo).unwrap() >= trees.get(t).unwrap() {
+                vbot = false;
+                break;
+            }
         }
         if vtop || vbot || vleft || vright {
             num_visible += 1;
@@ -81,35 +81,35 @@ fn part2(input: &((i32, i32), HashMap<(i32, i32), i32>)) -> i32 {
         let mut vleft = 0;
         let mut vright = 0;
 
-        for tx in 0..t.0 {
+        for tx in (0..t.0).rev() {
             let txo = (tx, t.1);
+            vleft += 1;
             if trees.get(&txo).unwrap() >= trees.get(t).unwrap() {
                 break;
             }
-            vleft += 1;
         }
         for tx in t.0 + 1..len_x {
             let txo = (tx, t.1);
+            vright += 1;
             if trees.get(&txo).unwrap() >= trees.get(t).unwrap() {
                 break;
             }
-            vright += 1;
         }
-        for ty in 0..t.1  {
+        for ty in (0..t.1).rev() {
             let tyo = (t.0, ty);
-                if trees.get(&tyo).unwrap() >= trees.get(t).unwrap() {
-                    break;
-                }
             vtop += 1;
+            if trees.get(&tyo).unwrap() >= trees.get(t).unwrap() {
+                break;
+            }
         }
-        for ty in t.1+1..len_y  {
+        for ty in t.1 + 1..len_y {
             let tyo = (t.0, ty);
-                if trees.get(&tyo).unwrap() >= trees.get(t).unwrap() {
-                    break;
-                }
             vbot += 1;
+            if trees.get(&tyo).unwrap() >= trees.get(t).unwrap() {
+                break;
+            }
         }
-        scenic_scores.push(vbot+vtop+vleft+vright);
+        scenic_scores.push(vbot * vtop * vleft * vright);
     }
     scenic_scores.sort();
     scenic_scores.last().unwrap().to_owned()
@@ -123,7 +123,7 @@ pub fn solve() {
             .as_str(),
     );
     println!("Day 08, part1: {}", part1(&trees));
-    println!("Day 07, part8: {}", part2(&trees));
+    println!("Day 08, part2: {}", part2(&trees));
 }
 
 // TESTS
