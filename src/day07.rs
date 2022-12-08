@@ -192,19 +192,19 @@ $ ls
 7214296 k"#;
 
 #[test]
-fn test_day06_prep() {
+fn test_day07_prep() {
     let (index, root_id) = prep(DAY07_EXAMPLE);
     assert_eq!(index.directories.len(), 4);
     assert_eq!(dir_size(root_id, &index), 48_381_165);
 }
 #[test]
-fn test_day06_part1() {
+fn test_day07_part1() {
     let (index, _) = prep(DAY07_EXAMPLE);
     assert_eq!(part1(&index), 95_437);
 }
 
 #[test]
-fn test_day06_part2() {
+fn test_day07_part2() {
     let (index, root_id) = prep(DAY07_EXAMPLE);
     assert_eq!(
         part2(root_id.clone(), &index).expect("No solution found"),
