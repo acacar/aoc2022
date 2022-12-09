@@ -152,6 +152,6 @@ fn test_day08_part1() {
 }
 
 #[test]
-fn test_day06_part2() {
+fn test_day08_part2() {
     assert_eq!(8, part2(&prep(DAY08_EXAMPLE)));
 }
