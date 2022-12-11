@@ -1,7 +1,7 @@
-use std::cell::RefCell;
+use std::{cell::RefCell, time::Instant};
 
 use crate::check_or_get_input;
-use sscanf::sscanf;
+use sscanf::{sscanf};
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 enum Op {
@@ -169,8 +169,20 @@ pub fn solve() {
             .expect("Day 11: cannot read input")
             .as_str(),
     );
-    println!("Day 11, part1: {}", part1(&mut monkeys.clone()));
-    println!("Day 11, part2: {}", part2(&mut monkeys.clone()));
+    let mut st = Instant::now();
+    let mut tmp = part1(&mut monkeys.clone());
+    println!(
+        "Day 11, part1: {} ({} us)",
+        tmp,
+        (Instant::now() - st).as_micros()
+    );
+    st = Instant::now();
+    tmp = part2(&mut monkeys.clone());
+    println!(
+        "Day 11, part2: {} ({} us)",
+        tmp,
+        (Instant::now() - st).as_micros()
+    );
 }
 
 // TESTS

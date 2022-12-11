@@ -1,5 +1,5 @@
 use sscanf::sscanf;
-use std::collections::HashSet;
+use std::{collections::HashSet, time::Instant};
 
 use crate::check_or_get_input;
 
@@ -102,13 +102,25 @@ fn part2(input: &Vec<(Direction, i32)>) -> i32 {
 
 pub fn solve() {
     let filename: String = check_or_get_input(9);
-    let trees = prep(
+    let rope = prep(
         std::fs::read_to_string(filename)
             .expect("Day 9: cannot read input")
             .as_str(),
     );
-    println!("Day 09, part1: {}", part1(&trees));
-    println!("Day 09, part2: {}", part2(&trees));
+    let mut st = Instant::now();
+    let mut tmp = part1(&rope);
+    println!(
+        "Day 9, part1: {} ({} us)",
+        tmp,
+        (Instant::now() - st).as_micros()
+    );
+    st = Instant::now();
+    tmp = part2(&rope);
+    println!(
+        "Day 9, part2: {} ({} us)",
+        tmp,
+        (Instant::now() - st).as_micros()
+    );
 }
 
 // TESTS

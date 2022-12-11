@@ -1,4 +1,4 @@
-use std::collections::HashMap;
+use std::{collections::HashMap, time::Instant};
 
 use crate::check_or_get_input;
 
@@ -105,8 +105,21 @@ pub fn solve() {
             .expect("Day 10: cannot read input")
             .as_str(),
     );
-    println!("Day 10, part1: {}", part1(&instructions));
-    println!("Day 10, part2: \n{}", part2(&instructions));
+    let mut st = Instant::now();
+    let tmp = part1(&instructions);
+    println!(
+        "Day 10, part1: {} ({} us)",
+        tmp,
+        (Instant::now() - st).as_micros()
+    );
+    st = Instant::now();
+    let tmp = part2(&instructions);
+    println!(
+        "Day 10, part2:\n {} ({} us)",
+        tmp,
+        (Instant::now() - st).as_micros()
+    );
+
 }
 
 // TESTS
