@@ -1,4 +1,4 @@
 /target
 .env
-/inputs
+/inputs/*.txt
 .DS_Store
