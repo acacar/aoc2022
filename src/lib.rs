@@ -18,7 +18,6 @@ pub mod day10;
 pub mod day11;
 pub mod day12;
 
-
 fn get_input(day: usize, session_id: &String) -> Result<bytes::Bytes, reqwest::Error> {
     let endpoint = format!("https://adventofcode.com/2022/day/{day}/input");
     let client = reqwest::blocking::Client::new();
