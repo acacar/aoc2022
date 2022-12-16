@@ -1,7 +1,7 @@
 use std::{cell::RefCell, time::Instant};
 
 use crate::check_or_get_input;
-use sscanf::{sscanf};
+use sscanf::sscanf;
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 enum Op {

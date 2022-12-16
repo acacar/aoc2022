@@ -119,7 +119,6 @@ pub fn solve() {
         tmp,
         (Instant::now() - st).as_micros()
     );
-
 }
 
 // TESTS
