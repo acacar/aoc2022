@@ -80,7 +80,7 @@ fn collide(r1: &Range, r2: &Range) -> (Option<Range>, Option<Range>) {
 }
 
 fn part1(sensors: &Vec<(i64, i64, i64, i64)>, at_line: i64) -> i64 {
-    get_projections(sensors, at_line, None)
+    get_projections(sensors, at_line, None) - 1
 }
 
 fn get_projections(
@@ -237,7 +237,7 @@ fn test_day15_part1() {
 
 #[test]
 fn test_day15_part2() {
-    println!("{}", part2(&prep(DAY15_EXAMPLE), (0, 20)));
+    assert_eq!(56000011, part2(&prep(DAY15_EXAMPLE), (0, 20)));
 }
 
 #[allow(dead_code)]
