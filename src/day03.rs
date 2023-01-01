@@ -30,11 +30,11 @@ fn find_common_in_groups(v: &[String]) -> HashSet<char> {
 }
 
 fn get_priority(c: &char) -> i32 {
-    if c.clone() as i32 > 0x60 {
-        return (c.clone() as i32) - 0x60;
+    return if c.clone() as i32 > 0x60 {
+        (c.clone() as i32) - 0x60
     } else {
-        return (c.clone() as i32 - 0x40) + 26;
-    }
+        (c.clone() as i32 - 0x40) + 26
+    };
 }
 
 fn part1(data: &Vec<String>) -> i32 {

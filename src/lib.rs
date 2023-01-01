@@ -18,6 +18,7 @@ pub mod day10;
 pub mod day11;
 pub mod day12;
 pub mod day15;
+pub mod day16;
 
 fn get_input(day: usize, session_id: &String) -> Result<bytes::Bytes, reqwest::Error> {
     let endpoint = format!("https://adventofcode.com/2022/day/{day}/input");
@@ -30,11 +31,7 @@ fn get_input(day: usize, session_id: &String) -> Result<bytes::Bytes, reqwest::E
     Ok(content)
 }
 
-fn save_input(
-    day: usize,
-    filepath: &str,
-    session_id: Option<String>,
-) -> Result<(), std::io::Error> {
+fn save_input(day: usize, filepath: &str, session_id: Option<String>) -> Result<(), io::Error> {
     let session_id = match session_id {
         Some(s) => s,
         None => dotenv::var("AOC_SESSION_ID").expect("Session ID not defined."),

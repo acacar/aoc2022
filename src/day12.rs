@@ -55,7 +55,7 @@ struct Candidate {
 }
 
 impl Ord for Candidate {
-    fn cmp(&self, other: &Self) -> std::cmp::Ordering {
+    fn cmp(&self, other: &Self) -> Ordering {
         (&other).f_score.cmp(&self.f_score)
     }
 }
@@ -180,20 +180,15 @@ pub fn solve() {
 }
 
 #[test]
-fn test_day12_prep() {
-    println!("{:?}", prep(DAY12_EXAMPLE));
-}
-
-#[test]
 fn test_day12_part1() {
     let (start, end, map) = prep(DAY12_EXAMPLE);
-    println!("{}", part1(&start, &end, &map))
+    assert_eq!(31, part1(&start, &end, &map))
 }
 
 #[test]
 fn test_day12_part2() {
     let (_, end, map) = prep(DAY12_EXAMPLE);
-    println!("{}", part2(&end, &map))
+    assert_eq!(29, part2(&end, &map))
 }
 
 #[allow(dead_code)]
