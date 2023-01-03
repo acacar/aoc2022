@@ -31,7 +31,6 @@ fn parse(input: &str) -> Vec<(String, i32, Vec<String>)> {
     }
     nodes
 }
-
 #[derive(Debug)]
 struct CaveSystem {
     nodes: HashMap<String, usize>,
