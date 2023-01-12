@@ -139,7 +139,7 @@ fn part1(blueprints: &Vec<Blueprint>) -> u32 {
 
 fn part2(blueprints: &Vec<Blueprint>) -> u32 {
     let result = blueprints
-        //Doing all three blueprints in parallel uses a lot of memory (~12GB)
+        //Doing all three blueprints in parallel uses a lot of memory (~32GB)
         //It might be better run these sequentially for low-memory machines.
         .into_par_iter() //This should be .iter() for sequential operation, .into_par_iter() for parallel
         .take(3)
