@@ -148,7 +148,7 @@ fn part2(blueprints: &Vec<Blueprint>) -> u32 {
             let maxg = search(&x, 32, [0, 0, 0, 0], [1, 0, 0, 0], &mut cache);
             println!("{}: {}", x.id, maxg);
 
-            maxg * x.id
+            maxg
         })
         .product()
 }
