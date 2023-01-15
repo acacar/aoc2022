@@ -1,4 +1,4 @@
-use crate::check_or_get_input;
+use aoc2022::check_or_get_input;
 use sscanf::sscanf;
 use std::{collections::HashSet, time::Instant};
 
@@ -183,7 +183,7 @@ fn part2(sensors: &Vec<(i64, i64, i64, i64)>, limits: (i64, i64)) -> i64 {
     panic!("Houston, we have a problem!");
 }
 
-pub fn solve() {
+pub fn main() {
     let filename: String = check_or_get_input(15);
     let locations = prep(
         std::fs::read_to_string(filename)

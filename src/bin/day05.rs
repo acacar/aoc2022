@@ -1,6 +1,6 @@
 use std::collections::HashMap;
 
-use crate::check_or_get_input;
+use aoc2022::check_or_get_input;
 use sscanf::sscanf;
 
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -126,7 +126,7 @@ fn part2(stacks: &HashMap<i32, Stack>, moves: &Vec<Move>) -> String {
     retval
 }
 
-pub fn solve() {
+pub fn main() {
     let filename: String = check_or_get_input(5);
     match prep(
         std::fs::read_to_string(filename)

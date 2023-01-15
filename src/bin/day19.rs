@@ -1,7 +1,7 @@
-use crate::check_or_get_input;
+use aoc2022::check_or_get_input;
 use rayon::prelude::*;
 use regex::Regex;
-use std::{collections::HashMap, time::Instant};
+use std::{cell::RefCell, collections::HashMap, time::Instant};
 
 #[derive(Debug)]
 struct Blueprint {
@@ -42,6 +42,7 @@ fn search(
     materials: [u32; 4],
     robots: [u32; 4],
     cache: &mut cache_t,
+    best: &RefCell<u32>,
 ) -> u32 {
     if time_left == 0 {
         cache.insert((materials, robots, 0), materials[3]);
@@ -50,6 +51,15 @@ fn search(
     if let Some(r) = cache.get(&(materials, robots, time_left)) {
         return r.to_owned();
     }
+
+    // No point in going on if the theoretical best we can do is less than some other branch:
+    if (materials[3] + (robots[3] * (time_left)) + ((time_left) * (time_left + 1) / 2))
+    //  what exists  +   what I can produce now  +  what I can produce even if I added one geode robot every turn
+        < *best.borrow()
+    {
+        return 0;
+    }
+
     let mut max_geodes = search(
         &blueprint,
         time_left - 1,
@@ -61,6 +71,7 @@ fn search(
         ],
         [robots[0], robots[1], robots[2], robots[3]],
         cache,
+        best,
     );
     for i in 0..4 {
         if i != 3
@@ -80,7 +91,7 @@ fn search(
             }
             if blueprint.costs[i][j] > 0 && robots[j] == 0 {
                 // No way to build robot_i right now
-                collect_time = 999999; //Simulate a infinite calendar
+                collect_time = 999999; //Fake an infinite calendar
                 break;
             }
             let t = if (blueprint.costs[i][j] - materials[j]) % robots[j] == 0 {
@@ -111,12 +122,16 @@ fn search(
             new_materials,
             new_robots,
             cache,
+            &best,
         );
         if geodes > max_geodes {
             max_geodes = geodes;
         }
     }
     cache.insert((materials, robots, time_left), max_geodes);
+    if max_geodes > *best.borrow() {
+        *best.borrow_mut() = max_geodes.to_owned();
+    }
     return max_geodes;
 }
 
@@ -129,8 +144,9 @@ fn part1(blueprints: &Vec<Blueprint>) -> u32 {
         .into_par_iter()
         .map(|x| {
             let mut cache = cache_t::new();
-            let maxg = search(&x, 24, [0, 0, 0, 0], [1, 0, 0, 0], &mut cache);
-            println!("{}: {}", x.id, maxg);
+            let best = RefCell::new(0 as u32);
+            let maxg = search(&x, 24, [0, 0, 0, 0], [1, 0, 0, 0], &mut cache, &best);
+            // println!("{}: {}", x.id, maxg);
             x.id * maxg
         })
         .sum();
@@ -138,22 +154,23 @@ fn part1(blueprints: &Vec<Blueprint>) -> u32 {
 }
 
 fn part2(blueprints: &Vec<Blueprint>) -> u32 {
-    //Doing all three blueprints in parallel uses a lot of memory (~32GB)
+    //Doing all three blueprints in parallel may use a lot of memory
     //It might be better run these sequentially for low-memory machines.
     blueprints
         .into_par_iter() //This should be .iter() for sequential operation, .into_par_iter() for parallel
         .take(3)
         .map(|x| {
             let mut cache = cache_t::new();
-            let maxg = search(&x, 32, [0, 0, 0, 0], [1, 0, 0, 0], &mut cache);
-            println!("{}: {}", x.id, maxg);
+            let best = RefCell::new(0 as u32);
+            let maxg = search(&x, 32, [0, 0, 0, 0], [1, 0, 0, 0], &mut cache, &best);
+            // println!("{}: {}", x.id, maxg);
 
             maxg
         })
         .product()
 }
 
-pub fn solve() {
+pub fn main() {
     let filename: String = check_or_get_input(19);
     let blueprints = prep(
         std::fs::read_to_string(filename)

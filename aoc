@@ -1,0 +1,16 @@
+#!/usr/bin/env python3
+
+import sys, os.path
+from subprocess import call
+
+days = []
+
+if len(sys.argv) > 1:
+    days = [int(x) for x in sys.argv[1:]]
+else:
+    for i in range(1,26):
+        if os.path.exists(f"./target/release/day{i:02}"):
+            days.append(i)
+
+for day_id in days:
+    call([f"target/release/day{day_id:02}"])

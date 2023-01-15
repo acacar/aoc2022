@@ -1,4 +1,4 @@
-use crate::check_or_get_input;
+use aoc2022::check_or_get_input;
 use sscanf::sscanf;
 
 fn prep(input: &str) -> Vec<(i32, i32, i32, i32)> {
@@ -40,7 +40,7 @@ fn part2(data: &Vec<(i32, i32, i32, i32)>) -> i32 {
     count
 }
 
-pub fn solve() {
+pub fn main() {
     let filename: String = check_or_get_input(4);
     let data = prep(
         std::fs::read_to_string(filename)

@@ -1,4 +1,4 @@
-use crate::check_or_get_input;
+use aoc2022::check_or_get_input;
 
 fn prep(input: &str) -> Vec<(String, String)> {
     let mut data = vec![];
@@ -81,7 +81,7 @@ fn part2(data: &Vec<(String, String)>) -> i32 {
     data.iter().map(|(p1, p2)| p2_score(p1, p2)).sum()
 }
 
-pub fn solve() {
+pub fn main() {
     let filename: String = check_or_get_input(2);
     let data = prep(
         std::fs::read_to_string(filename)

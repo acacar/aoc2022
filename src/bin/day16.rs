@@ -1,4 +1,4 @@
-use crate::check_or_get_input;
+use aoc2022::check_or_get_input;
 use regex::Regex;
 use std::{collections::HashMap, time::Instant};
 
@@ -168,7 +168,7 @@ fn part2(caves: &CaveSystem) -> i32 {
     max_flow
 }
 
-pub fn solve() {
+pub fn main() {
     let filename: String = check_or_get_input(16);
     let caves = prep(
         std::fs::read_to_string(filename)

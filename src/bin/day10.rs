@@ -1,6 +1,6 @@
 use std::{collections::HashMap, time::Instant};
 
-use crate::check_or_get_input;
+use aoc2022::check_or_get_input;
 
 type Trace = HashMap<i32, i32>;
 
@@ -98,7 +98,7 @@ fn part2(instructions: &Vec<Instruction>) -> String {
     retstr
 }
 
-pub fn solve() {
+pub fn main() {
     let filename: String = check_or_get_input(10);
     let instructions = prep(
         std::fs::read_to_string(filename)

@@ -1,6 +1,6 @@
 use std::{collections::HashMap, time::Instant};
 
-use crate::check_or_get_input;
+use aoc2022::check_or_get_input;
 
 fn prep(input: &str) -> ((i32, i32), HashMap<(i32, i32), i32>) {
     let mut map = HashMap::new();
@@ -115,7 +115,7 @@ fn part2(input: &((i32, i32), HashMap<(i32, i32), i32>)) -> i32 {
     scenic_scores.last().unwrap().to_owned()
 }
 
-pub fn solve() {
+pub fn main() {
     let filename: String = check_or_get_input(8);
     let trees = prep(
         std::fs::read_to_string(filename)

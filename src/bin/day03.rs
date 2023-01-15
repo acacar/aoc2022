@@ -1,6 +1,6 @@
 use std::collections::{hash_map::RandomState, HashSet};
 
-use crate::check_or_get_input;
+use aoc2022::check_or_get_input;
 
 fn prep(input: &str) -> Vec<String> {
     input.lines().map(|s| String::from(s)).collect()
@@ -57,7 +57,7 @@ fn part2(data: &Vec<String>) -> i32 {
     return total;
 }
 
-pub fn solve() {
+pub fn main() {
     let filename: String = check_or_get_input(3);
     let data = prep(
         std::fs::read_to_string(filename)

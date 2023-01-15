@@ -1,6 +1,6 @@
 use std::{cell::RefCell, time::Instant};
 
-use crate::check_or_get_input;
+use aoc2022::check_or_get_input;
 use sscanf::sscanf;
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
@@ -162,7 +162,7 @@ fn part2(input: &mut Vec<Monkey>) -> usize {
     num_inspected[0] * num_inspected[1]
 }
 
-pub fn solve() {
+pub fn main() {
     let filename: String = check_or_get_input(11);
     let monkeys = prep(
         std::fs::read_to_string(filename)

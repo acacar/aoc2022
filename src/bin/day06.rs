@@ -1,4 +1,4 @@
-use crate::check_or_get_input;
+use aoc2022::check_or_get_input;
 
 fn prep(input: &str) -> String {
     input.to_string()
@@ -41,7 +41,7 @@ fn part2(foo: &String) -> i32 {
     (i as i32) + 14
 }
 
-pub fn solve() {
+pub fn main() {
     let filename: String = check_or_get_input(6);
     let data = prep(
         std::fs::read_to_string(filename)

@@ -4,7 +4,7 @@ use std::{
     time::Instant,
 };
 
-use crate::check_or_get_input;
+use aoc2022::check_or_get_input;
 
 type Position = (i32, i32);
 fn prep(input: &str) -> (Position, Position, HashMap<Position, u8>) {
@@ -156,7 +156,7 @@ fn part2(end: &Position, map: &HashMap<Position, u8>) -> usize {
     min_score
 }
 
-pub fn solve() {
+pub fn main() {
     let filename: String = check_or_get_input(12);
     let (start, end, map) = prep(
         std::fs::read_to_string(filename)

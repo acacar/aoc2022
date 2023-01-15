@@ -1,7 +1,7 @@
 use sscanf::sscanf;
 use std::{collections::HashSet, time::Instant};
 
-use crate::check_or_get_input;
+use aoc2022::check_or_get_input;
 
 #[derive(Debug)]
 enum Direction {
@@ -100,7 +100,7 @@ fn part2(input: &Vec<(Direction, i32)>) -> i32 {
     visited.len() as i32
 }
 
-pub fn solve() {
+pub fn main() {
     let filename: String = check_or_get_input(9);
     let rope = prep(
         std::fs::read_to_string(filename)

@@ -1,4 +1,4 @@
-use crate::check_or_get_input;
+use aoc2022::check_or_get_input;
 
 fn prep(input: String) -> Vec<i32> {
     let mut data: Vec<i32> = vec![];
@@ -28,7 +28,7 @@ fn part2(data: &Vec<i32>) -> i32 {
     return data[0..3].iter().sum();
 }
 
-pub fn solve() {
+pub fn main() {
     let filename: String = check_or_get_input(1);
     let data = prep(std::fs::read_to_string(filename).expect("Day 1: cannot read input"));
     println!("Day 1, part 1: {}", part1(&data));

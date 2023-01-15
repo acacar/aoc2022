@@ -3,7 +3,7 @@ use std::collections::HashMap;
 use sscanf::sscanf;
 use uuid::Uuid;
 
-use crate::check_or_get_input;
+use aoc2022::check_or_get_input;
 
 #[derive(Debug)]
 struct Directory {
@@ -150,7 +150,7 @@ fn part2(root_id: Uuid, index: &MasterIndex) -> Option<i32> {
     None
 }
 
-pub fn solve() {
+pub fn main() {
     let filename: String = check_or_get_input(7);
     let (index, root_id) = prep(
         std::fs::read_to_string(filename)
