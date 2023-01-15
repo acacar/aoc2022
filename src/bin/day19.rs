@@ -1,7 +1,7 @@
 use aoc2022::check_or_get_input;
 use rayon::prelude::*;
 use regex::Regex;
-use std::{cell::RefCell, collections::HashMap, time::Instant};
+use std::{collections::HashSet, time::Instant};
 
 #[derive(Debug)]
 struct Blueprint {
@@ -33,106 +33,107 @@ fn parse(input: &str) -> Vec<Blueprint> {
     }
     blueprints
 }
-#[allow(non_camel_case_types)]
-type cache_t = HashMap<([u32; 4], [u32; 4], u32), u32>;
 
-fn search(
-    blueprint: &Blueprint,
+#[derive(Debug, Clone, Copy, Hash, PartialEq, Eq)]
+struct State {
     time_left: u32,
     materials: [u32; 4],
     robots: [u32; 4],
-    cache: &mut cache_t,
-    best: &RefCell<u32>,
-) -> u32 {
-    if time_left == 0 {
-        cache.insert((materials, robots, 0), materials[3]);
-        return materials[3];
-    }
-    if let Some(r) = cache.get(&(materials, robots, time_left)) {
-        return r.to_owned();
-    }
+}
 
-    // No point in going on if the theoretical best we can do is less than some other branch:
-    if (materials[3] + (robots[3] * (time_left)) + ((time_left) * (time_left + 1) / 2))
-    //  what exists  +   what I can produce now  +  what I can produce even if I added one geode robot every turn
-        < *best.borrow()
-    {
-        return 0;
-    }
-
-    let mut max_geodes = search(
-        &blueprint,
-        time_left - 1,
-        [
-            materials[0] + robots[0],
-            materials[1] + robots[1],
-            materials[2] + robots[2],
-            materials[3] + robots[3],
-        ],
-        [robots[0], robots[1], robots[2], robots[3]],
-        cache,
-        best,
-    );
-    for i in 0..4 {
-        if i != 3
-            && robots[i] >= blueprint.costs[0][i]
-            && robots[i] >= blueprint.costs[1][i]
-            && robots[i] >= blueprint.costs[2][i]
-            && robots[i] >= blueprint.costs[3][i]
-        {
-            continue;
+impl State {
+    fn mine(&self, duration: u32) -> Option<State> {
+        let mut newstate = self.clone();
+        for i in 0..4 {
+            newstate.materials[i] += newstate.robots[i];
         }
+        if (newstate.time_left as i32 - duration as i32) < 0 {
+            None
+        } else {
+            newstate.time_left -= duration;
+            Some(newstate)
+        }
+    }
 
-        let mut collect_time = 0;
-        for j in 0..3 {
-            if materials[j] >= blueprint.costs[i][j] {
-                //No need to wait for this raw material
-                continue;
+    fn make_robot(&self, blueprint: &Blueprint, robot_type: usize) -> Option<State> {
+        for material_needed in 0..3 {
+            if self.materials[material_needed] < blueprint.costs[robot_type][material_needed] {
+                // println!("{:?} < {:?}", self.materials, blueprint.costs[robot_type]);
+                return None;
             }
-            if blueprint.costs[i][j] > 0 && robots[j] == 0 {
-                // No way to build robot_i right now
-                collect_time = 999999; //Fake an infinite calendar
-                break;
+        }
+        if let Some(mut s) = self.mine(1) {
+            for cost_idx in 0..3 {
+                s.materials[cost_idx] -= blueprint.costs[robot_type][cost_idx]
             }
-            let t = if (blueprint.costs[i][j] - materials[j]) % robots[j] == 0 {
-                (blueprint.costs[i][j] - materials[j]) / robots[j]
-            } else {
-                (blueprint.costs[i][j] - materials[j]) / robots[j] + 1
-            };
-            collect_time = std::cmp::max(collect_time, t);
-        }
-        collect_time += 1; //we need one more round to build robot_i
+            s.robots[robot_type] += 1;
 
-        if collect_time > time_left {
-            //No way to do this in time
-            continue;
+            return Some(s);
         }
-        let mut new_robots = robots;
-        let mut new_materials = materials;
+        None
+    }
+}
+
+fn is_dominated(current: State, best: &State) -> bool {
+    return (current.materials[3]
+        + current.robots[3] * current.time_left
+        + ((current.time_left) * (current.time_left + 1) / 2))
+        <= best.materials[3];
+}
+
+fn fanout(prod_rate_limit: [u32; 3], blueprint: &Blueprint, parent: &State) -> Vec<State> {
+    let mut children = vec![];
+    if let Some(s) = parent.mine(1) {
+        children.push(s);
+    }
+
+    //Prioritize branches that make later robots
+    for robot_type in [3, 2, 1, 0].iter() {
+        //Can we benefit by making more of this robot
+        if *robot_type == 3 || parent.robots[*robot_type] < prod_rate_limit[*robot_type] {
+            if let Some(s) = parent.make_robot(blueprint, *robot_type) {
+                children.push(s);
+            }
+        }
+    }
+    children
+}
+
+fn search(blueprint: &Blueprint, time: u32) -> u32 {
+    let initial = State {
+        time_left: time,
+        materials: [0, 0, 0, 0],
+        robots: [1, 0, 0, 0],
+    };
+    let mut visited: HashSet<State> = HashSet::new();
+    let mut stack: Vec<State> = Vec::new();
+    let mut best: State = initial;
+
+    let mut prod_rate_limit: [u32; 3] = [0, 0, 0];
+    for i in 0..3 {
+        let mut max_cost = 0;
         for j in 0..4 {
-            new_materials[j] += robots[j] * collect_time;
-            if j != 3 {
-                new_materials[j] -= blueprint.costs[i][j];
+            max_cost = std::cmp::max(max_cost, blueprint.costs[j][i]);
+        }
+        prod_rate_limit[i] = max_cost;
+    }
+    stack.push(initial);
+
+    while !stack.is_empty() {
+        let current = stack.pop().unwrap();
+        if current.materials[3] > best.materials[3] {
+            best = current;
+        }
+        if current.time_left > 0 {
+            if !is_dominated(current, &best) {
+                if !visited.contains(&current) {
+                    visited.insert(current);
+                    stack.extend(fanout(prod_rate_limit, blueprint, &current).iter());
+                }
             }
         }
-        new_robots[i] += 1;
-        let geodes = search(
-            &blueprint,
-            time_left - collect_time,
-            new_materials,
-            new_robots,
-            cache,
-            &best,
-        );
-        if geodes > max_geodes {
-            max_geodes = geodes;
-        }
     }
-    cache.insert((materials, robots, time_left), max_geodes);
-    if max_geodes > *best.borrow() {
-        *best.borrow_mut() = max_geodes.to_owned();
-    }
-    return max_geodes;
+    best.materials[3]
 }
 
 fn prep(input: &str) -> Vec<Blueprint> {
@@ -143,10 +144,7 @@ fn part1(blueprints: &Vec<Blueprint>) -> u32 {
     let result = blueprints
         .into_par_iter()
         .map(|x| {
-            let mut cache = cache_t::new();
-            let best = RefCell::new(0 as u32);
-            let maxg = search(&x, 24, [0, 0, 0, 0], [1, 0, 0, 0], &mut cache, &best);
-            // println!("{}: {}", x.id, maxg);
+            let maxg = search(&x, 24);
             x.id * maxg
         })
         .sum();
@@ -160,11 +158,7 @@ fn part2(blueprints: &Vec<Blueprint>) -> u32 {
         .into_par_iter() //This should be .iter() for sequential operation, .into_par_iter() for parallel
         .take(3)
         .map(|x| {
-            let mut cache = cache_t::new();
-            let best = RefCell::new(0 as u32);
-            let maxg = search(&x, 32, [0, 0, 0, 0], [1, 0, 0, 0], &mut cache, &best);
-            // println!("{}: {}", x.id, maxg);
-
+            let maxg = search(&x, 32);
             maxg
         })
         .product()
